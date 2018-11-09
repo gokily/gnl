@@ -6,7 +6,7 @@
 /*   By: gly <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 12:54:51 by gly               #+#    #+#             */
-/*   Updated: 2018/11/09 13:24:01 by gly              ###   ########.fr       */
+/*   Updated: 2018/11/09 18:19:05 by gly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # define BUFF_SIZE 32
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
+# include <stdio.h>
 
 typedef struct	s_fdrest
 {
