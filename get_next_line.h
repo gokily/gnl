@@ -14,16 +14,17 @@
 # define GET_NEXT_LINE_H
 
 # define BUFF_SIZE 32
+# define NULL 0
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
 
-typedef struct	s_fdrest
+typedef struct	s_fdrst
 {
 	int			fd;
-	char		*rest;
-}				t_fdrest;
+	char		*rst;
+}				t_fdrst;
 
 int				get_next_line(const int fd, char **line);
 
