@@ -20,12 +20,13 @@
 # include <fcntl.h>
 # include <stdio.h>
 
-typedef struct	s_fdrst
+typedef struct		s_fdlst
 {
-	int			fd;
-	char		*rst;
-}				t_fdrst;
+	int				fd;
+	char			*rst;
+	struct s_fdlst	*next;
+}					t_fdlst;
 
-int				get_next_line(const int fd, char **line);
+int					get_next_line(const int fd, char **line);
 
 #endif

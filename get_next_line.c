@@ -23,32 +23,30 @@ char	*ft_strjoinfree(char *s1, char const *s2)
 	return (pt);
 }
 
-t_list	*ft_lstsrc_fd(t_list **lst_fdrst, int fd)
+t_fdlst	*ft_lstsrc_fd(t_fdlst **lst_fdrst, int fd)
 {
-	t_fdrst	*fdrst;
-	t_list	*lst_elem;
+	t_fdlst	*fdrst;
+	t_fdlst	*lst_elem;
 
+	puts("In ft_lstsrc_fd");
 	if (*lst_fdrst != NULL)
 	{
+		puts("lstsrc test");
 		lst_elem = *lst_fdrst;
 		while (lst_elem)
 		{
-			if (lst_elem->content->fd == fd)
+			if (lst_elem->fd == fd)
 				return (lst_elem);
 			lst_elem = lst_elem->next;
 		}
 	}
-	if (!(fdrst = (t_fdrst *)malloc(sizeof(t_fdrst))))
-		return (NULL);
+	puts("lstsrc test");
+	fdrst = malloc(sizeof(t_fdlst));
 	fdrst->fd = fd;
+	puts("lstsrc test");
+
 	if (!(fdrst->rst = (char *)malloc(sizeof(char))))
 	{
-		free(fdrst);
-		return (NULL);
-	}
-	if (!(lst_elem = ft_lstnew(fdrst, sizeof(t_fdrst *))))
-	{
-		free(fdrst->rst);
 		free(fdrst);
 		return (NULL);
 	}
@@ -58,17 +56,17 @@ t_list	*ft_lstsrc_fd(t_list **lst_fdrst, int fd)
 	return (lst_elem);
 }		
 		
-int		ft_writeline(char *read, char **line, t_list *lst_elem)
+int		ft_writeline(char *read, char **line, t_fdlst *lst_elem)
 {
 	char	*pt;
 
 	if ((pt = ft_strchr(read, '\n')))
 	{
-		if (!(lst_elem->content->rst = ft_strdup(pt + sizeof(char))))
+		if (!(lst_elem->rst = ft_strdup(pt + sizeof(char))))
 			return (-1);
 		if(!(*line = ft_strjoinfree(*line, ft_strsub(read, 0, pt - read))))
 		{
-			free(lst_elem->content->rst);
+			free(lst_elem->rst);
 			return (-1);
 		}
 		return (1);
@@ -80,27 +78,31 @@ int		ft_writeline(char *read, char **line, t_list *lst_elem)
 
 int		get_next_line(const int fd, char **line)
 {
-	static t_list	**lst_fdrst;
+	static t_fdlst	**lst_fdrst;
 	int				ret;
 	char			buff[BUFF_SIZE + 1];
 	char			*pt;
-	t_list			*lst_elem;
+	t_fdlst			*lst_elem;
 	int				n;
 
+	ft_putendl("In get_next_line");
 	free(*line);
 	*line = (char *)malloc(sizeof(char *));
-	*lst_fdrst = NULL;
+	lst_fdrst = malloc(sizeof(t_fdlst *));
+	ft_putendl("test");
 	if(!(lst_elem = ft_lstsrc_fd(lst_fdrst, fd)))
+	{
+		puts("test");
 		return (-1);
-	ft_putendl("In get_next_line");
-	if (lst_elem->content->rst != 0 && ft_strlen(lst_elem->content->rst))
+		}
+	if (lst_elem->rst != 0 && ft_strlen(lst_elem->rst))
 	{
 		ft_putendl("rst not empty");
 		ft_putstr("rst is ");
-		ft_putnbr(ft_strlen(lst_elem->content->rst));
+		ft_putnbr(ft_strlen(lst_elem->rst));
 		ft_putstr(" char long and is: ");
-		ft_putendl(lst_elem->content->rst);
-		n = ft_writeline(lst_elem->content->rst, line, lst_elem);
+		ft_putendl(lst_elem->rst);
+		n = ft_writeline(lst_elem->rst, line, lst_elem);
 		if (n != 0)
 			return (n);
 	}
