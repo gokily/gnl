@@ -28,10 +28,10 @@ t_fdlst	*ft_lstsrc_fd(t_fdlst **lst_fdrst, int fd)
 	t_fdlst	*fdrst;
 	t_fdlst	*lst_elem;
 
-	puts("In ft_lstsrc_fd");
+	lst_elem = malloc(sizeof(t_fdlst));
 	if (*lst_fdrst != NULL)
 	{
-		puts("lstsrc test");
+		puts("lst_fdrst not NULL");
 		lst_elem = *lst_fdrst;
 		while (lst_elem)
 		{
@@ -40,11 +40,8 @@ t_fdlst	*ft_lstsrc_fd(t_fdlst **lst_fdrst, int fd)
 			lst_elem = lst_elem->next;
 		}
 	}
-	puts("lstsrc test");
 	fdrst = malloc(sizeof(t_fdlst));
 	fdrst->fd = fd;
-	puts("lstsrc test");
-
 	if (!(fdrst->rst = (char *)malloc(sizeof(char))))
 	{
 		free(fdrst);
@@ -85,16 +82,11 @@ int		get_next_line(const int fd, char **line)
 	t_fdlst			*lst_elem;
 	int				n;
 
-	ft_putendl("In get_next_line");
 	free(*line);
 	*line = (char *)malloc(sizeof(char *));
 	lst_fdrst = malloc(sizeof(t_fdlst *));
-	ft_putendl("test");
 	if(!(lst_elem = ft_lstsrc_fd(lst_fdrst, fd)))
-	{
-		puts("test");
 		return (-1);
-		}
 	if (lst_elem->rst != 0 && ft_strlen(lst_elem->rst))
 	{
 		ft_putendl("rst not empty");

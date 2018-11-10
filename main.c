@@ -15,7 +15,8 @@
 
 int		main(int ac, char **av)
 {
-	int		fd;
+	int		fd1;
+	int		fd2;
 	char	**line;
 	char	str[1] = "";
 	
@@ -26,26 +27,27 @@ int		main(int ac, char **av)
 	line = malloc(sizeof(char **));
 	*line = malloc(sizeof(char *));
 	ft_putendl(av[1]);
-	fd = open(av[1], O_RDONLY);
-	ft_putnbr(fd);
+	fd1 = open(av[1], O_RDONLY);
+	fd2 = open(av[2], O_RDONLY);
+	ft_putnbr(fd1);
 	ft_putendl(" is the fd");
 
-	get_next_line(fd, line);
+	get_next_line(fd1, line);
 	ft_putendl("getting next line");
 	ft_putendl(*line);
 	ft_putendl("");
 
-	get_next_line(fd, line);
+	get_next_line(fd2, line);
 	ft_putendl("getting next line");
 	ft_putendl(*line);
 	ft_putendl("");
 
-	get_next_line(fd, line);
+	get_next_line(fd1, line);
 	ft_putendl("getting next line");
 	ft_putendl(*line);
 	ft_putendl("");
 
-	get_next_line(fd, line);
+	get_next_line(fd2, line);
 	ft_putendl("getting next line");
 	ft_putendl(*line);
 	ft_putendl("");
