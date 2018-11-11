@@ -80,7 +80,6 @@ int		get_next_line(const int fd, char **line)
 	static t_fdlst	*lst_fdrst = 0;
 	int				ret;
 	char			buff[BUFF_SIZE + 1];
-	char			*pt;
 	t_fdlst		*lst_elem;
 	int				n;
 
