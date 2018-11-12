@@ -6,7 +6,7 @@
 /*   By: gly <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 13:57:09 by gly               #+#    #+#             */
-/*   Updated: 2018/11/09 18:19:07 by gly              ###   ########.fr       */
+/*   Updated: 2018/11/12 14:31:26 by gly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,49 @@ int		main(int ac, char **av)
 
 	ft_putendl("getting next line");
 	line = malloc(sizeof(char *));
-	get_next_line(fd1, &line);
+	ft_putnbr(get_next_line(fd1, &line));
 	ft_putendl(line);
 	ft_putendl("");
 
 	ft_putendl("getting next line");
 	line = malloc(sizeof(char *));
-	get_next_line(fd1, &line);
+	ft_putnbr(get_next_line(fd1, &line));
 	ft_putendl(line);
 	ft_putendl("");
 
 	ft_putendl("getting next line");
 	line = malloc(sizeof(char *));
-	get_next_line(fd2, &line);
+	ft_putnbr(get_next_line(fd1, &line));
 	ft_putendl(line);
 	ft_putendl("");
 
 	ft_putendl("getting next line");
 	line = malloc(sizeof(char *));
-	get_next_line(fd1, &line);
+	ft_putnbr(get_next_line(fd1, &line));
 	ft_putendl(line);
 	ft_putendl("");
 
 	ft_putendl("getting next line");
 	line = malloc(sizeof(char *));
-	get_next_line(fd2, &line);
+	ft_putnbr(get_next_line(fd1, &line));
+	ft_putendl(line);
+	ft_putendl("");
+
+	ft_putendl("getting next line");
+	line = malloc(sizeof(char *));
+	ft_putnbr(get_next_line(fd1, &line));
+	ft_putendl(line);
+	ft_putendl("");
+
+	ft_putendl("getting next line");
+	line = malloc(sizeof(char *));
+	ft_putnbr(get_next_line(fd2, &line));
+	ft_putendl(line);
+	ft_putendl("");
+
+	ft_putendl("getting next line");
+	line = malloc(sizeof(char *));
+	ft_putnbr(get_next_line(fd2, &line));
 	ft_putendl(line);
 	ft_putendl("");
 

@@ -6,7 +6,7 @@
 /*   By: gly <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 13:21:17 by gly               #+#    #+#             */
-/*   Updated: 2018/11/09 18:18:50 by gly              ###   ########.fr       */
+/*   Updated: 2018/11/12 15:38:49 by gly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,25 @@ t_fdlst	*ft_lstsrc_fd(t_fdlst **lst_fdrst, int fd)
 	return (fdrst);
 }		
 		
-int		ft_writeline(char *read, char **line, t_fdlst *lst_elem)
+int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem, int ret)
 {
 	char	*pt;
 
 	if ((pt = ft_strchr(read, '\n')))
 	{
-		puts("found a \\n");
+		*pt = '\0';
 		if (!(lst_elem->rst = ft_strdup(pt + sizeof(char))))
 			return (-1);
-		if(!(*line = ft_strjoinfree(*line, ft_strsub(read, 0, pt - read))))
+		if(!(*tmp = ft_strjoinfree(*tmp, ft_strdup(read))))
 		{
 			free(lst_elem->rst);
 			return (-1);
 		}
-		printf("rst is %s\n", lst_elem->rst);
 		return (1);
 	}
-	if (!(*line = ft_strjoinfree(*line, read)))
+	if (!(*tmp = ft_strjoinfree(*tmp, read)))
 		return (-1);
-	return (0);
+	return (ret < BUFF_SIZE ? 1 : 0);
 }
 
 int		get_next_line(const int fd, char **line)
@@ -82,27 +81,26 @@ int		get_next_line(const int fd, char **line)
 	char			buff[BUFF_SIZE + 1];
 	t_fdlst		*lst_elem;
 	int				n;
+	char		*tmp;
 
+	ret = 0;
 	if (fd < 0 || line == NULL || read(fd, NULL, 0) < 0)
 		return (-1);
+	tmp = malloc(sizeof(char *));
 	if(!(lst_elem = ft_lstsrc_fd(&lst_fdrst, fd)))
 		return (-1);
-	puts("Fetched lst_elem");
 	if (lst_elem->rst != 0 && ft_strlen(lst_elem->rst))
 	{
-		ft_putendl("rst not empty");
-		ft_putstr("rst is ");
-		ft_putnbr(ft_strlen(lst_elem->rst));
-		ft_putstr(" char long and is: ");
-		ft_putendl(lst_elem->rst);
-		n = ft_writeline(lst_elem->rst, line, lst_elem);
+		n = ft_writeline(lst_elem->rst, &tmp, lst_elem, ret);
+		*line = n == 1 ? tmp : *line;
 		if (n != 0)
 			return (n);
 	}
 	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		buff[ret] = '\0';
-		n = ft_writeline(buff, line, lst_elem);
+		n = ft_writeline(buff, &tmp, lst_elem, ret);
+		*line = n == 1 ? tmp : *line;
 		if (n != 0)
 			return (n);
 	}
