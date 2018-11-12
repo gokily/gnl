@@ -6,7 +6,7 @@
 /*   By: gly <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 13:21:17 by gly               #+#    #+#             */
-/*   Updated: 2018/11/12 15:38:49 by gly              ###   ########.fr       */
+/*   Updated: 2018/11/12 17:37:56 by gly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_fdlst	*ft_lstsrc_fd(t_fdlst **lst_fdrst, int fd)
 	return (fdrst);
 }		
 		
-int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem, int ret)
+int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem)
 {
 	char	*pt;
 
@@ -71,7 +71,8 @@ int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem, int ret)
 	}
 	if (!(*tmp = ft_strjoinfree(*tmp, read)))
 		return (-1);
-	return (ret < BUFF_SIZE ? 1 : 0);
+	lst_elem->rst = NULL;
+	return (0);
 }
 
 int		get_next_line(const int fd, char **line)
@@ -80,29 +81,33 @@ int		get_next_line(const int fd, char **line)
 	int				ret;
 	char			buff[BUFF_SIZE + 1];
 	t_fdlst		*lst_elem;
-	int				n;
 	char		*tmp;
 
-	ret = 0;
 	if (fd < 0 || line == NULL || read(fd, NULL, 0) < 0)
 		return (-1);
 	tmp = malloc(sizeof(char *));
+	*tmp = '\0';
 	if(!(lst_elem = ft_lstsrc_fd(&lst_fdrst, fd)))
 		return (-1);
 	if (lst_elem->rst != 0 && ft_strlen(lst_elem->rst))
 	{
-		n = ft_writeline(lst_elem->rst, &tmp, lst_elem, ret);
-		*line = n == 1 ? tmp : *line;
-		if (n != 0)
-			return (n);
+		ret = ft_writeline(lst_elem->rst, &tmp, lst_elem);
+		*line = ret == 1 ? tmp : *line;
+		if (ret != 0)
+			return (ret);
 	}
 	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		buff[ret] = '\0';
-		n = ft_writeline(buff, &tmp, lst_elem, ret);
-		*line = n == 1 ? tmp : *line;
-		if (n != 0)
-			return (n);
+		ret = ft_writeline(buff, &tmp, lst_elem);
+		*line = ret == 1 ? tmp : *line;
+		if (ret != 0)
+			return (ret);
+	}
+	if (ft_strlen(tmp))
+	{
+		*line = tmp;
+		return (1);
 	}
 	return (0);
 }
