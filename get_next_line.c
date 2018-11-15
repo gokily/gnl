@@ -6,7 +6,7 @@
 /*   By: gly <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 13:21:17 by gly               #+#    #+#             */
-/*   Updated: 2018/11/13 15:58:39 by gly              ###   ########.fr       */
+/*   Updated: 2018/11/13 16:11:14 by gly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_fdlst	*ft_lstsrc_fd(t_fdlst **lst_fdrst, int fd)
 	return (fdrst);
 }
 
-int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem, char **line)
+int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem)
 {
 	char	*pt;
 	char	*dup;
@@ -67,7 +67,6 @@ int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem, char **line)
 			return (-1);
 		}
 		ft_strdel(&dup);
-		*line = *tmp;
 		return (1);
 	}
 	if (!(*tmp = ft_strjoinfree(*tmp, read)))
@@ -106,33 +105,23 @@ int		get_next_line(const int fd, char **line)
 	int				ret;
 	char			buff[BUFF_SIZE + 1];
 	t_fdlst			*lst_elem;
-	char			*tmp;
 
-	if (fd < 0 || line == NULL || read(fd, NULL, 0) < 0 || !(tmp = ft_strnew(0))
+	if (fd < 0 || line == 0 || read(fd, NULL, 0) < 0 || !(*line = ft_strnew(0))
 			|| !(lst_elem = ft_lstsrc_fd(&lst_fdrst, fd)))
 		return (-1);
 	if (lst_elem->rst != 0 && ft_strlen(lst_elem->rst))
 	{
-		ret = ft_writeline(lst_elem->rst, &tmp, lst_elem, line);
-		*line = ret == 1 ? tmp : *line;
-		if (ret != 0)
+		if ((ret = ft_writeline(lst_elem->rst, line, lst_elem)) != 0)
 			return (ret);
 	}
 	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		buff[ret] = '\0';
-		if (!(ret = ft_writeline(buff, &tmp, lst_elem, line)))
+		if ((ret = ft_writeline(buff, line, lst_elem)) != 0)
 			return (ret);
-		/*
-		ret = ft_writeline(buff, &tmp, lst_elem);
-		*line = ret == 1 ? tmp : *line;
-		if (ret != 0)
-		return (ret);
-		*/
 	}
-	if (ft_strlen(tmp))
+	if (ft_strlen(*line))
 	{
-		*line = tmp;
 		return (1);
 	}
 	ft_freenode(&lst_fdrst, fd);
