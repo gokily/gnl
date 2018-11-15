@@ -6,7 +6,7 @@
 /*   By: gly <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 13:57:09 by gly               #+#    #+#             */
-/*   Updated: 2018/11/12 15:42:33 by gly              ###   ########.fr       */
+/*   Updated: 2018/11/15 11:40:27 by gly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int		main(int ac, char **av)
 	int		fd2;
 	char	*line;
 	
+	line = 0;
+	free(line);
+	free(NULL);
 	ft_putendl("Start the test");
 	if (ac < 2)
 		return (0);

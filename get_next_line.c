@@ -6,7 +6,7 @@
 /*   By: gly <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 13:21:17 by gly               #+#    #+#             */
-/*   Updated: 2018/11/13 16:11:14 by gly              ###   ########.fr       */
+/*   Updated: 2018/11/15 11:40:37 by gly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,15 +109,13 @@ int		get_next_line(const int fd, char **line)
 	if (fd < 0 || line == 0 || read(fd, NULL, 0) < 0 || !(*line = ft_strnew(0))
 			|| !(lst_elem = ft_lstsrc_fd(&lst_fdrst, fd)))
 		return (-1);
-	if (lst_elem->rst != 0 && ft_strlen(lst_elem->rst))
-	{
-		if ((ret = ft_writeline(lst_elem->rst, line, lst_elem)) != 0)
-			return (ret);
-	}
+	if (lst_elem->rst != 0 && ft_strlen(lst_elem->rst) &&
+			(ret = ft_writeline(lst_elem->rst, line, lst_elem)) != 0)
+		return (ret);
 	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		buff[ret] = '\0';
-		if ((ret = ft_writeline(buff, line, lst_elem)) != 0)
+		if (ret < 0 || (ret = ft_writeline(buff, line, lst_elem)) != 0)
 			return (ret);
 	}
 	if (ft_strlen(*line))
