@@ -6,7 +6,7 @@
 #    By: gly <marvin@42.fr>                         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 13:31:32 by gly               #+#    #+#              #
-#    Updated: 2018/11/13 16:32:37 by gly              ###   ########.fr        #
+#    Updated: 2018/11/19 10:53:47 by gly              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,15 +31,18 @@ SRC = ft_atoi.c		ft_bzero.c		ft_isalnum.c	\
 	  ft_intabs.c	ft_strskipc.c	ft_intlen_base.c \
 	  ft_lstlast.c	ft_lstpop.c		ft_lstpush.c	\
 
-all: $(NAME)
-
 OBJ = $(SRC:.c=.o)
 
-%.o : %.c ./libft.h
-	gcc -Wall -Wextra -Werror -o $@ -c $<
+INCL = -I includes
+
+all: $(NAME)
+
 
 $(NAME): $(OBJ)
 	ar -rcs $(NAME) $(OBJ)
+
+%.o: %.c ./includes/libft.h
+	gcc -Wall -Wextra -Werror $(INCL) -o $@ -c $<
 
 .PHONY: clean fclean re all
 
