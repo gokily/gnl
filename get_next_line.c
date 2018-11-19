@@ -6,7 +6,7 @@
 /*   By: gly <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 13:21:17 by gly               #+#    #+#             */
-/*   Updated: 2018/11/15 11:40:37 by gly              ###   ########.fr       */
+/*   Updated: 2018/11/19 09:52:35 by gly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strjoinfree(char *s1, char *s2)
 	char	*pt;
 
 	if (!(pt = ft_strjoin(s1, s2)))
-		return (0);
+		return (NULL);
 	ft_strdel(&s1);
 	return (pt);
 }
@@ -41,7 +41,10 @@ t_fdlst	*ft_lstsrc_fd(t_fdlst **lst_fdrst, int fd)
 	if (!(fdrst = malloc(sizeof(t_fdlst))))
 		return (NULL);
 	if (!(fdrst->rst = ft_strnew(0)))
+	{
+		free(fdrst);
 		return (NULL);
+	}
 	fdrst->fd = fd;
 	fdrst->next = *lst_fdrst != NULL ? *lst_fdrst : NULL;
 	*lst_fdrst = fdrst;
@@ -56,10 +59,6 @@ int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem)
 	if ((pt = ft_strchr(read, '\n')))
 	{
 		*pt = '\0';
-		if (!(dup = ft_strdup(pt + sizeof(char))))
-			return (-1);
-		ft_strdel(&(lst_elem->rst));
-		lst_elem->rst = dup;
 		if (!(dup = ft_strdup(read))
 				|| !(*tmp = ft_strjoinfree(*tmp, dup)))
 		{
@@ -67,6 +66,10 @@ int		ft_writeline(char *read, char **tmp, t_fdlst *lst_elem)
 			return (-1);
 		}
 		ft_strdel(&dup);
+		if (!(dup = ft_strdup(pt + sizeof(char))))
+			return (-1);
+		ft_strdel(&(lst_elem->rst));
+		lst_elem->rst = dup;
 		return (1);
 	}
 	if (!(*tmp = ft_strjoinfree(*tmp, read)))
@@ -84,7 +87,9 @@ void	ft_freenode(t_fdlst **lst, int fd)
 	if (elem->fd == fd)
 	{
 		*lst = elem->next;
+		ft_strdel(&(elem->rst));
 		free(elem);
+		return ;
 	}
 	while (elem->next)
 	{
@@ -92,6 +97,7 @@ void	ft_freenode(t_fdlst **lst, int fd)
 		{
 			tmp = elem->next;
 			elem->next = elem->next->next;
+			ft_strdel(&(tmp->rst));
 			free(tmp);
 			return ;
 		}
@@ -118,10 +124,9 @@ int		get_next_line(const int fd, char **line)
 		if (ret < 0 || (ret = ft_writeline(buff, line, lst_elem)) != 0)
 			return (ret);
 	}
-	if (ft_strlen(*line))
-	{
-		return (1);
-	}
 	ft_freenode(&lst_fdrst, fd);
+	if (ft_strlen(*line) > 0)
+		return (1);
+	ft_strdel(line);
 	return (0);
 }
