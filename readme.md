@@ -19,7 +19,12 @@ The goal of this project is to code a function that returns a line ending with a
 * Global variables are forbidden.
 * Static variables are allowed.
 
-### Bonus part
+### Bonus
 The project get_next_line is straight forward and leaves very little room for bonuses. 
 * Succeed get_next_line with a single static variable.
 * Manage multiple file descriptor with your get_next_line. 
+Both bonuses were implemented.
+
+### What I learned
+* The use of static variables.
+* The use of valgrind to check for leaks.
